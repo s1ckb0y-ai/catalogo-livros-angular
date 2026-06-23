@@ -1,33 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { Livro } from '../livro';
-import { Editora } from '../editora';
-import { ControleEditoraService } from '../controle-editora.service';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ControleLivrosService } from '../controle-livros.service';
-import { Router } from '@angular/router';
+import { Livro } from '../livro';
 
 @Component({
-  selector: 'app-livro-dados',
-  templateUrl: './livro-dados.component.html',
-  standalone: false,
+  selector: 'app-livro-lista',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './livro-lista.component.html'
 })
-export class LivroDadosComponent implements OnInit {
-  public livro: Livro = new Livro();
-  public autoresForm: string = '';
-  public editoras: Editora[] = [];
+export class LivroListaComponent {
 
-  constructor(
-    private servEditora: ControleEditoraService,
-    private servLivros: ControleLivrosService,
-    private router: Router
-  ) {}
+  livros: Livro[] = [];
 
-  ngOnInit(): void {
-    this.editoras = this.servEditora.getEditoras();
+  constructor(private controleLivros: ControleLivrosService) {}
+
+  async ngOnInit() {
+    this.livros = await this.controleLivros.obterLivros();
   }
 
-  incluir = (): void => {
-    this.livro.autores = this.autoresForm.split('\n');
-    this.servLivros.incluir(this.livro);
-    this.router.navigateByUrl('/lista');
-  };
+  async excluir(codigo: number) {
+    await this.controleLivros.excluir(codigo.toString());
+    this.livros = await this.controleLivros.obterLivros();
+  }
 }
