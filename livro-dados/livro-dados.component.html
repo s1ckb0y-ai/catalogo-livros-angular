@@ -1,29 +1,16 @@
-<main class="container mt-4">
-  <h1>Cadastro de Livro</h1>
-  <form (submit)="incluir()" ngNativeValidate>
-    <div class="mb-3">
-      <label class="form-label">Título</label>
-      <input class="form-control" type="text" required [(ngModel)]="livro.titulo" name="titulo" />
-    </div>
+<form (ngSubmit)="incluir()">
+  <label>Título:</label>
+  <input [(ngModel)]="livro.titulo" name="titulo" required /><br />
 
-    <div class="mb-3">
-      <label class="form-label">Resumo</label>
-      <textarea class="form-control" [(ngModel)]="livro.resumo" name="resumo"></textarea>
-    </div>
+  <label>Resumo:</label>
+  <textarea [(ngModel)]="livro.resumo" name="resumo" required></textarea><br />
 
-    <div class="mb-3">
-      <label class="form-label">Editora</label>
-      <select class="form-select" required [(ngModel)]="livro.codEditora" name="editora">
-        <option *ngFor="let e of editoras" [value]="e.codEditora">{{ e.nome }}</option>
-      </select>
-    </div>
+  <label>Autores (separados por vírgula):</label>
+  <input [(ngModel)]="autoresTexto" name="autores" required /><br />
 
-    <div class="mb-3">
-      <label class="form-label">Autores (um por linha)</label>
-      <textarea class="form-control" [(ngModel)]="autoresForm" name="autores"></textarea>
-    </div>
+  <label>Editora:</label>
+  <input type="number" [(ngModel)]="livro.codEditora" name="editora" required /><br />
 
-    <button type="submit" class="btn btn-primary">Salvar</button>
-  </form>
-</main>
+  <button type="submit">Salvar</button>
+</form>
 
