@@ -1,35 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { Livro } from '../livro';
-import { Editora } from '../editora';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ControleLivrosService } from '../controle-livros.service';
-import { ControleEditoraService } from '../controle-editora.service';
+import { Livro } from '../livro';
 
 @Component({
   selector: 'app-livro-lista',
-  templateUrl: './livro-lista.component.html',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './livro-lista.component.html'
 })
-export class LivroListaComponent implements OnInit {
-  public livros: Livro[] = [];
-  public editoras: Editora[] = [];
+export class LivroListaComponent {
 
-  constructor(
-    private servLivros: ControleLivrosService,
-    private servEditora: ControleEditoraService
-  ) {}
+  livros: Livro[] = [];
 
-  ngOnInit(): void {
-    this.livros = this.servLivros.obterLivros();
-    this.editoras = this.servEditora.getEditoras();
+  constructor(private controleLivros: ControleLivrosService) {}
+
+  async ngOnInit() {
+    this.livros = await this.controleLivros.obterLivros();
   }
 
-  excluir = (codigo: number): void => {
-    this.servLivros.excluir(codigo);
-    this.livros = this.servLivros.obterLivros();
-  };
-
-  obterNome = (codEditora: number): string => {
-    return this.servEditora.getNomeEditora(codEditora);
-  };
+  async excluir(codigo: number) {
+    await this.controleLivros.excluir(codigo.toString());
+    this.livros = await this.controleLivros.obterLivros();
+  }
 }
 
